@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
+const {env} = require('../Environments/env');
 
 const initilization = () => {
   setupCors();
@@ -35,7 +36,7 @@ function setupBodyParser(){
 
 function setupDatabase(){
   mongoose
-    .connect(process.env.MONGO_URL)
+    .connect(env().db_root)
     .then((r) => {
       console.log("Connected to MongoDB");
     })

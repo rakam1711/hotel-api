@@ -13,13 +13,18 @@ const Admin = new Mongoose.Schema({
     type: String,
     required: true,
   },
-  created_at:{
+  created_at: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
-  updated_at:{
+  updated_at: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
+  role: {
+    type: String,
+    enum: ["Admin", "SubAdmin"],
+    default: "Admin",
+  },
 });
-module.exports = Mongoose.model('Admin',Admin);
+module.exports = Mongoose.model("Admin", Admin);
