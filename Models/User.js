@@ -1,7 +1,7 @@
 const Mongoose = require("mongoose");
 const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
-const User = new Mongoose.Schema({
+const UserSchema = new Mongoose.Schema({
   profile_pic: {
     type: String,
   },
@@ -13,8 +13,8 @@ const User = new Mongoose.Schema({
     unique: true,
     required: true,
   },
-  phone:{
-    type:String,
+  phone: {
+    type: String,
   },
   password: {
     type: String,
@@ -29,5 +29,5 @@ const User = new Mongoose.Schema({
     default: Date.now,
   },
 });
-User.plugin(aggregatePaginate);
-module.exports = Mongoose.model("User", User);
+Users.plugin(aggregatePaginate);
+module.exports = Mongoose.model("Users", UserSchema);
