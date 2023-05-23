@@ -16,7 +16,6 @@ exports.ractifyError = (req, res, next) => {
 exports.authenticate = (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader ? authHeader.slice(7, authHeader.length) : null;
-    console.log("authHeader",token);
     try {
         jwt.verify(token, env().jwt_secret, ((err, decoded) => {
             if (err) {
