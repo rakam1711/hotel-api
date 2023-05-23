@@ -11,17 +11,18 @@ exports.adminSignup = async (req, res, next) => {
         name: data.name,
         email: data.email,
         password: hashedPassword,
+        status:true,
         role:'Admin',
         created_on: new Date(),
       });
   
-      const user = await registration.save();
-      user.password = null;
+      const admin = await registration.save();
+      admin.password = null;
   
       res.send({
         status: 201,
         message: "Admin Register Successfully",
-        data: { user },
+        data: { admin },
       });
     } catch (error) {
       next(error);

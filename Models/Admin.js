@@ -13,6 +13,15 @@ const Admin = new Mongoose.Schema({
     type: String,
     required: true,
   },
+  status:{
+    type:Boolean,
+    default:true
+  },
+  role: {
+    type: String,
+    enum: ["Admin", "SubAdmin"],
+    default: "Admin",
+  },
   created_at: {
     type: Date,
     default: Date.now,
@@ -20,11 +29,6 @@ const Admin = new Mongoose.Schema({
   updated_at: {
     type: Date,
     default: Date.now,
-  },
-  role: {
-    type: String,
-    enum: ["Admin", "SubAdmin"],
-    default: "Admin",
   },
 });
 module.exports = Mongoose.model("Admin", Admin);

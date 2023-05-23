@@ -4,6 +4,8 @@ const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const {env} = require('../Environments/env');
+const Routes = require('../Routes/Routes')
+
 
 const initilization = () => {
   setupCors();
@@ -46,7 +48,7 @@ function setupDatabase(){
 };
 
 function setupRoutes(){
-//   app.use("/api/v1");
+  app.use("/api/v1",Routes);
 };
 
 function setupError404Handler(){

@@ -1,13 +1,13 @@
 const { body, query, check } = require('express-validator'); // express validator import
-const User = require('../Models/User');
+const Admin = require('../Models/Admin');
 
-exports.userRegister = ((req, res) => {
+exports.adminRegister = ((req, res) => {
     return [
         body('email', 'Email is Required').isEmail()
         .custom((result, { req }) => {
-            return User.findOne({ email: result })
-                .then(user => {
-                    if (user) {
+            return Admin.findOne({ email: result })
+                .then(admin => {
+                    if (admin) {
                         throw new Error('Email Already Exist');
                     } else {
                         return true;
@@ -23,7 +23,7 @@ exports.userRegister = ((req, res) => {
     ];
 })
 
-exports.userLogin = (req, res) => {
+exports.adminLogin = (req, res) => {
     return [
         check('password', 'Password is Required')
         // .isLength({ min: 8 })
@@ -34,10 +34,10 @@ exports.userLogin = (req, res) => {
         .trim().escape()
         .custom((result,{ req }) => {
             const data = req.body;
-            return User.findOne({ email: data.email })
-                .then(user => {
-                    if (user) {
-                        req.userData = user; //to save user details in req
+            return Admin.findOne({ email: data.email })
+                .then(admin => {
+                    if (admin) {
+                        req.userData = admin; //to save user details in req
                     } else {
                         throw new Error('User Does Not Exist');
                     }
@@ -47,13 +47,12 @@ exports.userLogin = (req, res) => {
     ]
 }
 
-exports.checkUserStatus = (req,res)=>{
+exports.checkAdminStatus = (req,res)=>{
     return [
         check('email','Email is required').custom((result,{req})=>{
             const data = req?.userData
-            return User.findOne({email:data?.email}).then(user=>{
-                if (user?.status == true) {
-                    console.log(user);
+            return Admin.findOne({email:data?.email}).then(admin=>{
+                if (admin?.status == true) {
                     return true
                 } else {
                     throw new Error('Your account is blocked.Kindly contact to admin');
