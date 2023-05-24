@@ -9,12 +9,13 @@ function initilization() {
   postRoutes();
   putRoutes();
   patchRoutes();
+  deleteRoutes();
 }
 
 initilization();
 
 function getRoutes() {
-  SubAdminRoutes.get('/subadminlist', GlobalMiddlewares.ractifyError, SubAdminController.getSubAdminList)
+  SubAdminRoutes.get('/subadminlist',GlobalMiddlewares.authenticate, GlobalMiddlewares.ractifyError, SubAdminController.getSubAdminList)
 
 }
 
@@ -29,13 +30,13 @@ function putRoutes() {
 
 }
 function patchRoutes() {
-  SubAdminRoutes.put('/change-status', GlobalMiddlewares.ractifyError, SubAdminController.changeSubAdminStatus)
+  SubAdminRoutes.patch('/change-status', GlobalMiddlewares.authenticate,GlobalMiddlewares.ractifyError, SubAdminController.changeSubAdminStatus)
 
 }
 function deleteRoutes() {
-  SubAdminRoutes.patch('/delete-subadmin', GlobalMiddlewares.ractifyError, SubAdminController.deleteSubAdmin)
+  SubAdminRoutes.delete('/delete-subadmin', GlobalMiddlewares.authenticate, GlobalMiddlewares.ractifyError, SubAdminController.deleteSubAdmin)
 
 
 }
 
-module.exports = AdminRoutes;
+module.exports = SubAdminRoutes;

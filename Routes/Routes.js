@@ -1,6 +1,7 @@
 const express = require("express");
 const routes = express.Router();
 const AdminAuthRouter =  require('./Admin/AuthRoutes')
+const SubAdminRouter = require('./Admin/SubadminRoutes');
 
 function initilization() {
     app();
@@ -18,6 +19,7 @@ function app() {
 
 function admin() {
     routes.use('/admin/auth',AdminAuthRouter)
+    routes.use('/admin/subadmin',SubAdminRouter)
 }
 
 function web(){

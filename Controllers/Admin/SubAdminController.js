@@ -65,7 +65,7 @@ exports.getSubAdminList = async (req, res, next) => {
 exports.changeSubAdminStatus = async (req, res, next) => {
   try {
     const data = req.body;
-    const subadminData = await User.findOne({ _id: data?._id });
+    const subadminData = await Admin.findOne({ _id: data?._id });
     subadminData.status = !subadminData?.status
     const subadmin = await subadminData.save()
     res.send({
