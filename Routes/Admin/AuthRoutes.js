@@ -18,6 +18,7 @@ function getRoutes() {
 
 function postRoutes() {
     AdminRoutes.post('/register', AdminValidation.adminRegister, GlobalMiddlewares.ractifyError, AuthController.adminSignup)
+    AdminRoutes.post('/login', AdminValidation.adminLogin, GlobalMiddlewares.ractifyError, AuthController.adminLogin)
 }
 
 function putRoutes() {

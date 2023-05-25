@@ -64,37 +64,22 @@ exports.deleteUser = async (req, res, next) => {
     }
 }
 
-exports.userLoginController = async (req, res, next) => {
-    const { email, password } = req.body
-    const errors = []
-    data = {}
-
-    try {
-        const user = Users.findOne({ email })
-        if (!user) {
-            throw new Error('User not found')
-        }
-        const isMatch = await user.verifyPassword(password)
-
-        if (!isMatch) {
-            throw new Error('Email and Password do not match')
-        }
-        const token = user.getSignedToken()
-        if (!token) {
-            throw new Error('Unable to login the user')
-        }
-        data.token = token
-
-    } catch (error) {
-        if (typeof error === typeof new Error('')) {
-            errors.push(error.message)
-        } else {
-            errors.push(String(error))
-        }
-
-    } return {
-        success: errors.length < 1,
-        errors,
-        data
+exports.userLogin = async(req,res,next)=>{
+  try {
+    const data = req.body;
+    const user = req.userData;
+    const isMatched = await bcrypt.compare(data.password, user.password);
+    if (isMatched) {
+      const token = jwt.sign(
+        { _id: user._id, email: user.email },
+        env().jwt_secret
+      );
+        user.password = null
+      res.send({ status: 200, message: "Login successfully", data: { user,token } });
+    } else {
+      res.send({ status: 401, message: "Invalid email or password", data: {} });
     }
+  } catch (error) {
+    next(error)
+  }
 }

@@ -2,7 +2,7 @@ const express = require("express");
 const SubAdminRoutes = express.Router();
 const SubAdminController = require('../../Controllers/Admin/SubAdminController')
 const GlobalMiddlewares = require('../../Middlewares/GlobalMiddlewares')
-// const AdminValidation = require('../../Validations/AdminValidations')
+const AdminValidation = require('../../Validations/AdminValidations')
 
 function initilization() {
   getRoutes();
@@ -20,7 +20,7 @@ function getRoutes() {
 }
 
 function postRoutes() {
-  SubAdminRoutes.post('/register', GlobalMiddlewares.ractifyError, SubAdminController.subAdminSignup)
+  SubAdminRoutes.post('/subadmin-register',GlobalMiddlewares.authenticate,AdminValidation.adminRegister, GlobalMiddlewares.ractifyError, SubAdminController.subAdminSignup)
 
 
 }

@@ -37,7 +37,7 @@ exports.adminLogin = (req, res) => {
             return Admin.findOne({ email: data.email })
                 .then(admin => {
                     if (admin) {
-                        req.userData = admin; //to save user details in req
+                        req.adminData = admin; //to save user details in req
                     } else {
                         throw new Error('User Does Not Exist');
                     }

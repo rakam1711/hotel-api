@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator'); // it collect response from express-validators
 const jwt = require('jsonwebtoken');
 const { env } = require('../Environments/env');
+const formidable = require('formidable')
 
 exports.ractifyError = (req, res, next) => {
 
@@ -31,6 +32,23 @@ exports.authenticate = (req, res, next) => {
     } catch (e) {
         req.errorStatus = 401;
         next(e);
+    }
+}
+
+exports.formDataParser=(req, res, next)=> {
+    try {
+        const form = formidable({ multiples: true });
+        form.parse(req, (err, fields = {}, files) => {
+            if (err) {
+                next(err);
+                return;
+            }
+            req.body = { ...fields, files }
+            next();
+        });
+    } catch (error) {
+        req.errorStatus = 401; // 401 Unprocessable Entity
+        next(error)
     }
 }
 

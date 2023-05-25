@@ -29,3 +29,23 @@ exports.adminSignup = async (req, res, next) => {
   }
 };
 
+exports.adminLogin = async(req,res,next)=>{
+  try {
+    const data = req.body;
+    const admin = req.adminData;
+    const isMatched = await bcrypt.compare(data.password, admin.password);
+    if (isMatched) {
+      const token = jwt.sign(
+        { _id: admin._id, email: admin.email },
+        env().jwt_secret
+      );
+        admin.password = null
+      res.send({ status: 200, message: "Login successfully", data: { admin,token } });
+    } else {
+      res.send({ status: 401, message: "Invalid email or password", data: {} });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
