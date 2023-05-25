@@ -5,9 +5,9 @@ const GlobalMiddlewares = require('../../Middlewares/GlobalMiddlewares')
 const { getUsersList, changeUserStatus, eleteUser, userLoginController } = UserController
 
 const UserWebRouter = express.Router();
+const { protect } = GlobalMiddlewares
 
-
-UserWebRouter.post('/login', GlobalMiddlewares, async (req, res) => {
+UserWebRouter.post('/login', protect, async (req, res) => {
   const response = await userLoginController(req)
   res.json(response).status(200)
 })

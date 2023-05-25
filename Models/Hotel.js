@@ -1,7 +1,7 @@
 const Mongoose = require("mongoose");
 const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
-const Hotel = new Mongoose.Schema({
+const hotelSchema = new Mongoose.Schema({
   images: {
     type: Array,
     default: [],
@@ -12,14 +12,14 @@ const Hotel = new Mongoose.Schema({
   address: {
     type: String,
   },
-  phone:{
-    type:String,
+  phone: {
+    type: String,
   },
   no_of_rooms: {
     type: String,
   },
-  rooms_types:{
-    type:Array,
+  rooms_types: {
+    type: Array,
     default: [],
   },
   created_at: {
@@ -31,5 +31,6 @@ const Hotel = new Mongoose.Schema({
     default: Date.now,
   },
 });
-Hotel.plugin(aggregatePaginate);
-module.exports = Mongoose.model("Hotel", Hotel);
+hotelSchema.plugin(aggregatePaginate);
+const hotels = Mongoose.model("Hotels", hotelSchema);
+module.exports = hotels

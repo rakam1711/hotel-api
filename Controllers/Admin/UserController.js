@@ -1,5 +1,8 @@
-const User = require("../../Models/User");
-const { User } = user
+const User = require("../Models");
+const { Users } = User
+
+
+
 exports.getUsersList = async (req, res, next) => {
     try {
         const options = {
@@ -34,7 +37,7 @@ exports.getUsersList = async (req, res, next) => {
 exports.changeUserStatus = async (req, res, next) => {
     try {
         const data = req.body;
-        const userData = await User.findOne({ _id: data?._id });
+        const userData = await Users.findOne({ _id: data?._id });
         userData.status = !userData?.status
         const user = await userData.save()
         res.send({
@@ -50,7 +53,7 @@ exports.changeUserStatus = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
     try {
         const data = req.query;
-        await User.deleteOne({ _id: data?.id });
+        await Users.deleteOne({ _id: data?.id });
         res.send({
             status: 200,
             message: 'User Deleted Successfully',
@@ -67,7 +70,7 @@ exports.userLoginController = async (req, res, next) => {
     data = {}
 
     try {
-        const user = User.findOne({ email })
+        const user = Users.findOne({ email })
         if (!user) {
             throw new Error('User not found')
         }
@@ -76,11 +79,11 @@ exports.userLoginController = async (req, res, next) => {
         if (!isMatch) {
             throw new Error('Email and Password do not match')
         }
-        // const token = user.getSignedToken()
-        // if (!token) {
-        //     throw new Error('Unable to login the user')
-        // }
-        // data.token = token
+        const token = user.getSignedToken()
+        if (!token) {
+            throw new Error('Unable to login the user')
+        }
+        data.token = token
 
     } catch (error) {
         if (typeof error === typeof new Error('')) {
