@@ -1,6 +1,4 @@
 const User = require("../Models");
-const { Users } = User
-
 
 
 exports.getUsersList = async (req, res, next) => {
@@ -37,7 +35,7 @@ exports.getUsersList = async (req, res, next) => {
 exports.changeUserStatus = async (req, res, next) => {
     try {
         const data = req.body;
-        const userData = await Users.findOne({ _id: data?._id });
+        const userData = await User.findOne({ _id: data?._id });
         userData.status = !userData?.status
         const user = await userData.save()
         res.send({
@@ -53,7 +51,7 @@ exports.changeUserStatus = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
     try {
         const data = req.query;
-        await Users.deleteOne({ _id: data?.id });
+        await User.deleteOne({ _id: data?.id });
         res.send({
             status: 200,
             message: 'User Deleted Successfully',
@@ -64,22 +62,49 @@ exports.deleteUser = async (req, res, next) => {
     }
 }
 
-exports.userLogin = async(req,res,next)=>{
-  try {
-    const data = req.body;
-    const user = req.userData;
-    const isMatched = await bcrypt.compare(data.password, user.password);
-    if (isMatched) {
-      const token = jwt.sign(
-        { _id: user._id, email: user.email },
-        env().jwt_secret
-      );
-        user.password = null
-      res.send({ status: 200, message: "Login successfully", data: { user,token } });
-    } else {
-      res.send({ status: 401, message: "Invalid email or password", data: {} });
+exports.userSignup = async (req, res, next) => {
+    try {
+        const data = req.body;
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+        const registration = new User({
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            password: hashedPassword,
+            status: true,
+            role: 'User',
+            created_on: new Date(),
+        });
+
+        const user = await registration.save();
+        user.password = null;
+
+        res.send({
+            status: 201,
+            message: "SubAdmin Register Successfully",
+            data: { user },
+        });
+    } catch (error) {
+        next(error);
     }
-  } catch (error) {
-    next(error)
-  }
+}
+
+exports.userLogin = async (req, res, next) => {
+    try {
+        const data = req.body;
+        const user = req.adminData;
+        const isMatched = await bcrypt.compare(data.password, user.password);
+        if (isMatched) {
+            const token = jwt.sign(
+                { _id: user._id, email: user.email },
+                env().jwt_secret
+            );
+            user.password = null
+            res.send({ status: 200, message: "User Login successfully", data: { user, token } });
+        } else {
+            res.send({ status: 401, message: "Invalid email or password", data: {} });
+        }
+    } catch (error) {
+        next(error);
+    }
 }
